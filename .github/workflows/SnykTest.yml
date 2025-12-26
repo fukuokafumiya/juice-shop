@@ -1,22 +1,34 @@
-name: Example workflow using Snyk
-on: push
+
+name: Cortex CLI Code Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  CORTEX_API_KEY: ${{secrets.CORTEX_API_KEY}}
+  CORTEX_API_KEY_ID: ${{secrets.CORTEX_API_KEY_ID}}
+  CORTEX_API_URL: https://api-tsdev.xdr.jp.paloaltonetworks.com
+  
 jobs:
-  security:
+  cortex-code-scan:
     runs-on: ubuntu-latest
+
     steps:
-
-      - name: Checkout Repository
-      　uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
     
-      - name: Set up Node.js
-     　 uses: actions/setup-node@v4
-      　with:
-        　node-version: 22
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
 
-      - name: Verify Node.js Version
-      　run: node -v
+    - name: Verify Node.js Version
+      run: node -v
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@v4
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@v4
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
